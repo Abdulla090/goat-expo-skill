@@ -330,6 +330,31 @@ Deliver: FloatingGlassTabBar component, tab layout wiring, mesh background on ta
 
 ---
 
+## PROMPT — SEED IDEA → PRODUCTION PLAN
+
+```
+The user gave a small app idea. Do NOT write code yet.
+
+Idea: [PASTE USER'S IDEA — even one sentence]
+
+Follow references/brainstorm-idea.md exactly:
+1. Parse seed → job, user, moment, outcome, wedge
+2. Write positioning one-liner (not "AI-powered" unless core to the idea)
+3. MVP: ≤5 screens, ≤4 tabs — table with user job per feature
+4. "NOT in MVP" list (non-empty)
+5. Expo Router route tree
+6. Data model + storage (MMKV / SecureStore / SQLite / Query — per entity)
+7. Stack picks from goat-expo-skill decision rules (list component per screen)
+8. Visual direction (metaphor, anti-slop — references/anti-ai-slop.md)
+9. Phases 0–2 with week estimates
+10. Output the full Product Brief template from brainstorm-idea.md
+11. End with max 2 open questions + "Reply build it to scaffold"
+
+Label assumptions. Reject feature dumps. No create-expo-app until user confirms.
+```
+
+---
+
 ## PROMPT — STACK AUDIT (HONEST 999 RUBRIC)
 
 ```

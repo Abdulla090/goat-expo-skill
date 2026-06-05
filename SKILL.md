@@ -13,7 +13,8 @@ description: >
   "useAnimatedReaction", "metro cache", "HMR crash", "expo web console",
   "what libraries should I use for RN", "senior expo stack", "rate my react native stack",
   "expo stack score", "stack audit", "mastery rubric", "expo-audio", "expo-av migration",
-  "ai slop", "anti ai slop", "generic ai design", "too many cards", "box in box UI".
+  "ai slop", "anti ai slop", "generic ai design", "too many cards", "box in box UI",
+  "app idea", "brainstorm app", "I want to build", "plan my app", "startup idea", "MVP plan".
   Use when building or architecting any React Native + Expo app (iOS + Android + web).
   Covers: SDK 56, dev builds, Expo Router (RN fork), Expo UI, Uniwind/NativeWind v5,
   Reanimated 4.4, FlashList v2, Legend List v3, MMKV v4/Nitro, TanStack Query, EAS, agents.
@@ -56,6 +57,7 @@ Read this file first, then open the reference file for the layer you are impleme
 | `references/i18n-rtl.md` | expo-localization, RTL, Arabic/Kurdish |
 | `references/android-deep-dive.md` | Safe areas, AAB, signing, Play tracks |
 | `references/store-aso.md` | App Store / Play submission, ASO, rejections |
+| `references/brainstorm-idea.md` | **Seed idea → production brief** — expand vague app ideas before coding |
 | `references/vibe-coder-prompts.md` | Copy-paste AI prompts + official Expo skills |
 | `references/field-bug-playbook.md` | **After fixing non-obvious bugs** — symptom/fix/AI-trap entries agents must append |
 | `references/web-rn-pitfalls.md` | **Web console errors** — `boxShadow`, `style.pointerEvents`, Reanimated web, stale HMR |
@@ -138,6 +140,10 @@ Read this file first, then open the reference file for the layer you are impleme
 ---
 
 ## DECISION RULES
+
+**Vague app idea / one-line concept?**
+→ Read **`references/brainstorm-idea.md`** — output Product Brief first; no code until user confirms
+→ Use **`vibe-coder-prompts.md`** Prompt: Seed Idea → Production Plan
 
 **List component?**
 → Static / &lt; ~100 rows → `FlatList`
