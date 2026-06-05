@@ -179,6 +179,8 @@ export function cn(...inputs: ClassValue[]) {
 
 ## LAYER 3 — LIQUID GLASS (iOS 26)
 
+**Edge shading (system default):** Read **`references/ios-26-liquid-glass-edge-shading.md`** — specular top arc, Fresnel rim, dual border, inset web shadows, when native `GlassView` owns rims vs custom fallback on web/Android.
+
 **Official path (use first):**
 
 1. **Expo UI** `glassEffect` modifier (SwiftUI-backed)
@@ -200,6 +202,10 @@ export function GlassHeader() {
 ```
 
 Some iOS 26 betas lack API — always guard with `isGlassEffectAPIAvailable()`.
+
+On **native GlassView**, let the system draw edge shading — do not stack 6 custom gradient rims on top.
+
+On **web / Android / iOS fallback**, use shared `LiquidGlassSurface` + `LiquidGlassEdgeShading` (see edge-shading reference).
 
 Respect `AccessibilityInfo.isReduceTransparencyEnabled()`.
 
@@ -341,3 +347,12 @@ Test: iPhone SE, Pro Max, iPad, low-end Android narrow width.
 Expo UI universal components work on web (experimental). Use `*.web.tsx` for divergent tab/navigation chrome.
 
 NativeTabs are **native-only** — always split layouts for web.
+
+### RN 0.83+ web style deprecations
+
+| Avoid on web | Use |
+|---|---|
+| `shadowColor`, `shadowOffset`, `shadowOpacity`, `shadowRadius` in shared styles | `crossShadow()` → `boxShadow` on web, legacy shadow on native |
+| `pointerEvents="none"` View prop | `style={{ pointerEvents: 'none' }}` |
+
+Liquid glass shells: multi-layer **`boxShadow`** (float + inset rim) on web — see `ios-26-liquid-glass-edge-shading.md`. Full triage: **`web-rn-pitfalls.md`**.

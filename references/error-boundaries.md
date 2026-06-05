@@ -14,6 +14,17 @@ sees a white screen and force-quits, or sees a recovery screen and continues.
 Error boundaries catch JS errors. Sentry logs them. Recovery screens
 give users a path forward. All three are required.
 
+### Triage: stale Metro before “real” bugs
+
+On **Expo web dev**, `AppErrorBoundary` may catch `ReferenceError: X is not defined` when:
+
+- `grep src/` shows **zero** matches for `X` (symbol was removed in source)
+- Console also shows **“Expo CLI and the web client are out of sync”** or HMR websocket errors
+
+**Action order:** `npx expo start --web --clear` → hard refresh browser → only then patch code.
+
+Common false positives: `useAnimatedReaction`, renamed layout constants (`TAB_BAR_TOP_PADDING`). Details: `references/web-rn-pitfalls.md`.
+
 ---
 
 ## REACT ERROR BOUNDARY

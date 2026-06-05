@@ -193,6 +193,30 @@ Exit animations: **shorter duration than enter** (speed perception).
 
 ---
 
+## REANIMATED ON WEB (SDK 56 / RN 0.83+)
+
+Web Reanimated **does not support custom spring easing** — console falls back to linear and spams warnings.
+
+**Rule:** Use `withSpring` on iOS/Android; use `withTiming` (~200–240ms, `Easing.out(Easing.cubic)`) on web for the same motion intent.
+
+```ts
+import { Platform } from "react-native";
+import { Easing, withSpring, withTiming } from "react-native-reanimated";
+
+export function springMotion(to: number, config = { damping: 28, stiffness: 280 }) {
+  if (Platform.OS === "web") {
+    return withTiming(to, { duration: 220, easing: Easing.out(Easing.cubic) });
+  }
+  return withSpring(to, config);
+}
+```
+
+Call from **JS thread** (`useEffect`, press handlers) — not inside worklets with `Platform.OS`.
+
+**Tab / segment indicators:** Prefer `useEffect` + optimistic press over `useAnimatedReaction` for syncing to React Navigation `state.index` — fewer import bugs, same UX. Full pattern: `references/web-rn-pitfalls.md`.
+
+---
+
 ## SHARED ELEMENT TRANSITIONS
 
 ```tsx
@@ -217,6 +241,7 @@ Limit stacked `glassEffect` / `GlassView` layers when running scroll-linked Rean
 - [ ] Glass layers ≤ 3 per screen
 - [ ] Lottie files optimized
 - [ ] Tested on low-end Android + iOS device
+- [ ] **Web:** sliding indicators use `springMotion` / `withTiming` (no Reanimated easing spam)
 - [ ] `__DEV__` FPS monitor only: Reanimated dev tools
 
 ---

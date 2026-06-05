@@ -21,16 +21,17 @@ Use when you want a **floating pill tab bar** over colorful/mesh backgrounds (re
 
 ## VISUAL STRATEGIES (color-agnostic)
 
-Borrow the **structure**, not a fixed palette:
+Borrow the **structure**, not a fixed palette. **iOS 26 edge shading detail:** `references/ios-26-liquid-glass-edge-shading.md`.
 
-1. **Floating capsule** — high `borderRadius` (≈24–32), horizontal margin from screen edges (≈12–20), small gap above home indicator.
-2. **Frosted translucency** — background content (mesh, gradients, photos) **must** show through softly; flat gray screens make glass look like plastic.
-3. **Hairline rim** — 1px border, high-opacity white or `foreground` at ~15–25% on light glass (defines pill edge).
-4. **Diffuse float shadow** — low-opacity shadow + Android `elevation` (≈6–12); shadow color from app `shadow` token, not pure black.
-5. **Active tab** — **oval pill** behind icon + label (inset from slot edges), not full-width segment or underline.
-6. **Inactive tabs** — icon above label, muted `foreground` / `muted-foreground`; no background chip.
-7. **Press** — subtle scale (~0.94–0.96 spring) on tab tap; haptics optional (often **off** for tab switches — see `premium-feel.md`).
-8. **Background behind bar** — prefer **mesh / soft blobs / gradient fields** on tab screens so blur/frost has something to refract (same strategy as reference mockups with green/yellow wash).
+1. **Floating capsule** — high `borderRadius` (≈height/2), horizontal margin (≈12–20), gap above home indicator; optional **detached FAB** same height as pill.
+2. **Frosted translucency** — pearl-slate tint on **white apps** (`rgba(226,232,240,0.55)` + blur); pure white frost disappears on `#FFF`.
+3. **iOS 26 edge stack** (custom fallback) — specular top arc → Fresnel left/right rims → bottom inner shade → top hairline → dual rim → inset web shadows.
+4. **Native iOS 26** — `GlassView` draws system rims; **skip** duplicate custom edge layers.
+5. **Diffuse float shadow** — adaptive: stronger over busy content, softer on flat white.
+6. **Active tab** — **circle** or capsule chip inside pill; **`springMotion` on press** (optimistic) + `useEffect` when `state.index` catches up — **not** `useAnimatedReaction` (easy to break imports; see `web-rn-pitfalls.md`).
+7. **Inactive tabs** — icon-only or icon + label; muted foreground.
+8. **Press** — scale ~0.92–0.96 spring; tab haptics usually off (`premium-feel.md`).
+9. **Scroll edge** — transparent `tabBarStyle`; list `paddingBottom` clears float; no opaque bar backgrounds behind glass.
 
 **Token example (adapt to your theme):**
 
@@ -68,6 +69,9 @@ export const FLOATING_TAB_GLASS = {
 
 - Frost layers + optional `backdrop-filter: blur(20px)` on a wrapper; test Safari.
 - Split layout: `_layout.web.tsx` → JS floating tabs; `_layout.ios.tsx` → NativeTabs or same JS bar per product choice.
+- **RN 0.83+ web:** `boxShadow` via `crossShadow()` — never raw `shadow*` in shared styles; `pointerEvents` on **style**, not prop (`web-rn-pitfalls.md`).
+- **Reanimated:** `springMotion()` (web `withTiming`, native `withSpring`) for indicator slide — avoids easing warnings.
+- After tab bar refactors: `npx expo start --web --clear` + hard refresh — stale HMR can throw `useAnimatedReaction is not defined` even when source removed it.
 
 ---
 
@@ -121,20 +125,25 @@ export default function TabLayout() {
 
 ```
 FloatingGlassTabBar
-├── host (absolute bottom, pointerEvents box-none)
+├── host (absolute bottom, style.pointerEvents: 'box-none')
 ├── floatWrap (horizontal margin, bottom margin)
 └── GlassShell (pill)
     ├── FrostLayers (underlay + frost + optional brand tint + LinearGradient sheen)
     ├── [iOS] GlassView or BlurView
     ├── border hairline overlay
     └── row
-        ├── Animated active oval (translateX withSpring on tab index)
+        ├── Animated active circle/chip (translateX via springMotion / optimistic press)
         └── tabs[] → Pressable + Animated.View scale
             ├── Icon
             └── Label
 ```
 
-**Active pill motion:** `useSharedValue` + `withSpring` sliding oval to `index * slotWidth` (Reanimated 4).
+**Active pill motion:** `useSharedValue` + **`springMotion`** sliding chip to `index * slotWidth` (Reanimated 4). On press: move immediately; `useEffect` syncs when `state.index` updates (skip if optimistic press already moved).
+
+```ts
+// utils/motion-spring.ts — web uses withTiming, native withSpring
+pillX.value = springMotion(pillTargetX(index));
+```
 
 **Press pattern (reliable):** `Pressable` wrapping `Animated.View` for scale — avoid `Animated.createAnimatedComponent(Pressable)` if it returns `undefined` in some builds.
 
@@ -145,7 +154,7 @@ FloatingGlassTabBar
 On tab root screens, use a **full-bleed mesh or gradient mesh** behind scroll content so the floating bar has visual depth:
 
 - 2–4 soft radial gradients or blurred color blobs (`expo-linear-gradient`, Skia, or static image).
-- Keep mesh `pointerEvents="none"` so taps pass through to content.
+- Keep mesh `style={{ pointerEvents: 'none' }}` so taps pass through to content.
 - Do **not** put heavy blur stacks inside list rows (`ui-design.md` glass limits).
 
 ---
@@ -158,6 +167,8 @@ On tab root screens, use a **full-bleed mesh or gradient mesh** behind scroll co
 - Dynamic tab count at runtime (remounts navigator — keep static triggers)
 - Glass layers inside FlashList/LegendList rows
 - More than **~3** stacked glass surfaces visible at once on one screen
+- `useAnimatedReaction` for tab index when `useEffect` + optimistic press suffices (missing import crashes web)
+- Raw `shadowColor` / `shadowOffset` on styles that render on web (use `crossShadow`)
 
 ---
 
@@ -175,6 +186,8 @@ Need system-native tabs?
 
 ## RELATED FILES
 
+- `references/web-rn-pitfalls.md` — **boxShadow, pointerEvents, springMotion, Metro HMR**
+- `references/ios-26-liquid-glass-edge-shading.md` — **specular/Fresnel rim, web inset shadows, button wiring**
 - `references/navigation.md` — NativeTabs vs JS tabs
 - `references/ui-design.md` — Liquid Glass layers, performance caps
 - `references/premium-feel.md` — press scale, haptics on tabs

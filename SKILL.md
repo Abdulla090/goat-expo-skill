@@ -6,8 +6,11 @@ description: >
   "expo libraries", "react native setup", "expo setup", "best RN libraries", "expo production",
   "react native 2026", "expo sdk 56", "expo router", "reanimated", "flashlist", "legendlist",
   "nativewind", "uniwind", "expo ui", "new architecture", "EAS", "dev build", "expo-dev-client",
-  "mobile app architecture", "react native performance", "liquid glass", "native tabs",
+  "mobile app architecture", "react native performance",   "liquid glass", "ios 26 edge shading", "glass edge shading", "specular highlight",
+  "fresnel rim", "liquid glass button", "native tabs",
   "floating tab bar", "glass tab bar", "frosted tab bar", "pill tab bar", "custom tab bar",
+  "boxShadow", "shadow deprecated", "pointerEvents deprecated", "reanimated web",
+  "useAnimatedReaction", "metro cache", "HMR crash", "expo web console",
   "what libraries should I use for RN", "senior expo stack", "rate my react native stack",
   "expo stack score", "stack audit", "mastery rubric", "expo-audio", "expo-av migration",
   "ai slop", "anti ai slop", "generic ai design", "too many cards", "box in box UI".
@@ -35,6 +38,7 @@ Read this file first, then open the reference file for the layer you are impleme
 | `references/foundation.md` | New project, SDK 56 upgrade, New Arch, Hermes, React Compiler, dev builds |
 | `references/navigation.md` | Expo Router, SDK 56 RN import fork, NativeTabs, Stack v5, deep links |
 | `references/floating-glass-tab-bar.md` | **Optional** floating pill + frosted glass custom tab bar over mesh/hero UI |
+| `references/ios-26-liquid-glass-edge-shading.md` | **iOS 26 default** specular/Fresnel rim, platform strategy, RN `LiquidGlassSurface` |
 | `references/ui-design.md` | Expo UI, Uniwind/NativeWind, Liquid Glass, icons, theming |
 | `references/animations.md` | Reanimated 4.4, worklets, Gesture Handler, Moti, Lottie, Skia |
 | `references/performance.md` | FlashList v2, Legend List v3, MMKV v4, images, profiling |
@@ -53,6 +57,8 @@ Read this file first, then open the reference file for the layer you are impleme
 | `references/android-deep-dive.md` | Safe areas, AAB, signing, Play tracks |
 | `references/store-aso.md` | App Store / Play submission, ASO, rejections |
 | `references/vibe-coder-prompts.md` | Copy-paste AI prompts + official Expo skills |
+| `references/field-bug-playbook.md` | **After fixing non-obvious bugs** — symptom/fix/AI-trap entries agents must append |
+| `references/web-rn-pitfalls.md` | **Web console errors** — `boxShadow`, `style.pointerEvents`, Reanimated web, stale HMR |
 | `references/production-edge-cases.md` | Sentry + `expo/fetch`, Nitro/MMKV, haptics gate, `expo-audio` (945→999) |
 | `references/mastery-rubric.md` | **Honest scoring**, skill-vs-app split, pre-ship audit, filter hype research |
 | `references/native-modules.md` | When to write JSI/Turbo, Nitrogen, Wasm reality check |
@@ -243,6 +249,9 @@ Breaking highlights: `expo/fetch` default · async `expo-file-system` copy/move 
 14. **Score knowledge and execution separately** — `references/mastery-rubric.md`; never rate 920+ from `package.json` alone.
 15. **Lists per screen** — FlashList / Legend List / ScrollView by rule in `performance.md`; do not blanket-migrate leaderboards to FlashList.
 16. **Custom native last** — `references/native-modules.md`; JSI is not the path from 920→999 for typical apps.
+17. **Web RN deprecations** — `shadow*` → `boxShadow`, `pointerEvents` on **style**; Reanimated springs → `withTiming` on web (`references/web-rn-pitfalls.md`).
+18. **Stale Metro first** — `ReferenceError` for removed symbols + “out of sync” → `expo start --clear` before chasing phantom bugs.
+19. **Document non-obvious fixes** — after solving a non-common or AI-repeatable bug, append `references/field-bug-playbook.md` before ending the session (`agentic-workflows.md`).
 
 ---
 
@@ -258,6 +267,8 @@ Breaking highlights: `expo/fetch` default · async `expo-file-system` copy/move 
 **What 999 adds beyond 945:** anti-inflated AI reviews, execution audit, expo-audio + file-system SDK 56, haptics gate, Hermes heap steps, agentic QA map (Maestro > agents), EAS ccache/workflows, Unistyles branch, research-filter rubric.
 
 **The remaining 1 point:** reserved for field-proven updates (SDK bumps, incident postmortems) — edit the skill when production teaches something new.
+
+**Recent field updates:** `field-bug-playbook.md` (Guidebook Android crash, glass-on-small-chip, tab animation); `web-rn-pitfalls.md` (crossShadow, springMotion, Metro HMR).
 
 ---
 

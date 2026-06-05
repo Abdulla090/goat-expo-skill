@@ -197,6 +197,24 @@ Agents scoring “920+” must run that checklist against the **repo**, not `pac
 
 ---
 
+## 8. Expo web — RN deprecations + stale Metro
+
+**Full guide:** `references/web-rn-pitfalls.md`
+
+| Production symptom | Senior fix |
+|---|---|
+| `shadow* style props are deprecated` | `crossShadow()` utility — `boxShadow` on web only |
+| `props.pointerEvents is deprecated` | `style.pointerEvents` on decorative overlays / glass layers |
+| Reanimated easing not supported on web | `springMotion()` — `withTiming` on web, `withSpring` native |
+| `useAnimatedReaction is not defined` (grep clean) | **Stale HMR** — `expo start --web --clear`, hard refresh |
+| Tab indicator dead on first tap | Optimistic press + `useEffect`; don’t rely on reaction-only sync |
+
+**Agent workflow:** After fixing web console issues in a repo, update `web-rn-pitfalls.md` + linked references so the next session doesn’t reintroduce the bug.
+
+**All platforms:** Non-obvious or AI-repeatable bugs → append `field-bug-playbook.md` (`agentic-workflows.md`).
+
+---
+
 ## References
 
 - Expo SDK 56 changelog — `expo/fetch` default

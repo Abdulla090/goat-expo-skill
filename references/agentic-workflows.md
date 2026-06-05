@@ -111,3 +111,20 @@ Do **not** treat these as stack requirements:
 - **“Agents replace Maestro”** — wrong; agents augment humans, Maestro gates releases
 
 Filter external research through `mastery-rubric.md` Pre-ship audit.
+
+---
+
+## KEEP SKILLS CURRENT (field learnings) — **mandatory after non-trivial fixes**
+
+When you fix a bug that is **non-obvious**, **platform-specific**, or a **repeatable AI mistake** (not a one-line typo):
+
+1. **Fix in code** — add shared utils (`crossShadow`, `springMotion`) when the pattern appears twice.
+2. **Append to `references/field-bug-playbook.md`** — symptom → root cause → fix → AI trap → test step (use the template at bottom of that file).
+3. **Update the focused reference** — web → `web-rn-pitfalls.md`; tabs → `floating-glass-tab-bar.md`; nav → `navigation.md`; crashes → `error-boundaries.md`.
+4. **Sync** `.cursor/skills/goat-expo-skill/` → `~/.agents/skills/rn-expo-stack/` when the user maintains both copies.
+
+**Document if:** next agent would likely reintroduce it (glass on tiny chips, `useAnimatedReaction` for tabs, navigate mid-Reanimated press, stale Metro phantom errors).
+
+**Skip if:** product-only logic, copy, or a single-file typo with no pattern.
+
+**Examples already in playbook:** Guidebook Android crash, web shadow/pointerEvents deprecations, tab optimistic animation, hidden-route `fade` on Android.
